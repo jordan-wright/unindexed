@@ -1,6 +1,6 @@
 # unindexed
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/jordan-wright/unindexed)](https://goreportcard.com/report/github.com/jordan-wright/unindexed) [![GoDoc](https://godoc.org/github.com/gophish/gophish?status.svg)](https://godoc.org/github.com/gophish/gophish)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jordan-wright/unindexed)](https://goreportcard.com/report/github.com/jordan-wright/unindexed) [![GoDoc](https://godoc.org/github.com/gophish/gophish?status.svg)](https://godoc.org/github.com/gophish/gophish) ![[TravisCI](https://travis-ci.org/jordan-wright/unindexed.svg?branch=master)](https://travis-ci.org/jordan-wright/unindexed.svg?branch=master)
 
 A Golang HTTP FileSystem that disables directory indexing.
 
