@@ -2,6 +2,7 @@ package unindexed
 
 import (
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -15,7 +16,8 @@ type FileSystem struct {
 
 // Open returns a file from the static directory. If the requested path ends
 // with a slash, there is a check for an index.html file. If none exists, then
-// an error is returned.
+// an os.ErrPermission error is returned, causing a 403 Forbidden error to be
+// returned to the client
 func (ufs FileSystem) Open(name string) (http.File, error) {
 	f, err := ufs.fs.Open(name)
 	if err != nil {
@@ -28,7 +30,7 @@ func (ufs FileSystem) Open(name string) (http.File, error) {
 		index := strings.TrimSuffix(name, "/") + "/index.html"
 		_, err := ufs.fs.Open(index)
 		if err != nil {
-			return nil, err
+			return nil, os.ErrPermission
 		}
 	}
 	return f, nil
