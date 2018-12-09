@@ -5,18 +5,18 @@ import (
 	"strings"
 )
 
-// UnindexedFileSystem is an implementation of a standard http.FileSystem
+// FileSystem is an implementation of a standard http.FileSystem
 // without the ability to list files in the directory.
 // This implementation is largely inspired by
 // https://www.alexedwards.net/blog/disable-http-fileserver-directory-listings
-type UnindexedFileSystem struct {
+type FileSystem struct {
 	fs http.FileSystem
 }
 
 // Open returns a file from the static directory. If the requested path ends
 // with a slash, there is a check for an index.html file. If none exists, then
 // an error is returned.
-func (ufs UnindexedFileSystem) Open(name string) (http.File, error) {
+func (ufs FileSystem) Open(name string) (http.File, error) {
 	f, err := ufs.fs.Open(name)
 	if err != nil {
 		return nil, err
@@ -35,10 +35,10 @@ func (ufs UnindexedFileSystem) Open(name string) (http.File, error) {
 	return f, nil
 }
 
-// Dir allows the library to serve as a drop-in replacement for http.Dir,
-// providing an unindexed filesystem for serving static files.
+// Dir is a drop-in replacement for http.Dir, providing an unindexed
+// filesystem for serving static files.
 func Dir(filepath string) http.FileSystem {
-	return UnindexedFileSystem{
+	return FileSystem{
 		fs: http.Dir(filepath),
 	}
 }
