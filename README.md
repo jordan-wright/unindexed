@@ -6,7 +6,9 @@ A Golang HTTP FileSystem that disables directory indexing.
 
 ## Motivation
 
-By default, the `http.Dir` filesystem has directory indexing enabled. For example, let's say you have a `.git/` folder at the root of the folder you're serving. If someone were to request `your_url/.git/`, the contents of the folder would be listed.
+By default, the `http.Dir` filesystem has [directory indexing enabled](https://www.owasp.org/index.php/OWASP_Periodic_Table_of_Vulnerabilities_-_Directory_Indexing). For example, let's say you have a `.git/` folder at the root of the folder you're serving. If someone were to request `your_url/.git/`, the contents of the folder would be listed.
+
+This package disables directory indexing, preventing the contents from being listed.
 
 ## Installation
 
