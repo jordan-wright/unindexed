@@ -26,11 +26,10 @@ func (ufs FileSystem) Open(name string) (http.File, error) {
 	s, err := f.Stat()
 	if s.IsDir() {
 		index := strings.TrimSuffix(name, "/") + "/index.html"
-		indexFile, err := ufs.fs.Open(index)
+		_, err := ufs.fs.Open(index)
 		if err != nil {
 			return nil, err
 		}
-		return indexFile, nil
 	}
 	return f, nil
 }
