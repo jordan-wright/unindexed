@@ -15,16 +15,10 @@ func ExampleEmbedDir() {
 	http.Handle("/", http.FileServer(http.FileSystem(EmbedFS{fs: embed.FS{}})))
 }
 
-func createTemporaryEmbedDirectory(t *testing.T) string {
-	return "unindexed-static"
-}
-
 //go:embed test_embed
 var embedTest embed.FS
 
 func TestEmbedNotFound(t *testing.T) {
-	dir := createTemporaryEmbedDirectory(t)
-	defer tearDown(dir, t)
 	r := httptest.NewRequest("GET", "/doesntexist", nil)
 	w := httptest.NewRecorder()
 	handler := http.FileServer(http.FileSystem(EmbedFS{fs: embedTest}))
@@ -36,8 +30,6 @@ func TestEmbedNotFound(t *testing.T) {
 }
 
 func TestEmbedNoIndex(t *testing.T) {
-	dir := createTemporaryEmbedDirectory(t)
-	defer tearDown(dir, t)
 	r := httptest.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
 	handler := http.FileServer(EmbedFS{fs: embedTest})
