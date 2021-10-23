@@ -1,4 +1,4 @@
-package unindexed_test
+package unindexed
 
 import (
 	"bytes"
@@ -9,14 +9,12 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/jordan-wright/unindexed"
 )
 
 // The easiest way to use unindexed is to use the Dir function, which is
 // a drop-in replacement to http.Dir.
 func ExampleDir() {
-	http.Handle("/", http.FileServer(unindexed.Dir("./static/")))
+	http.Handle("/", http.FileServer(Dir("./static/")))
 }
 
 func createTemporaryDirectory(t *testing.T) string {
@@ -46,7 +44,7 @@ func TestNotFound(t *testing.T) {
 	defer tearDown(dir, t)
 	r := httptest.NewRequest("GET", "/doesntexist", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(unindexed.Dir(dir))
+	handler := http.FileServer(Dir(dir))
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusNotFound {
@@ -59,7 +57,7 @@ func TestNoIndex(t *testing.T) {
 	defer tearDown(dir, t)
 	r := httptest.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(unindexed.Dir(dir))
+	handler := http.FileServer(Dir(dir))
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusForbidden {
@@ -80,7 +78,7 @@ func TestWithIndex(t *testing.T) {
 
 	r := httptest.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(unindexed.Dir(dir))
+	handler := http.FileServer(Dir(dir))
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusOK {
