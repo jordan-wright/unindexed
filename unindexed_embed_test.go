@@ -12,7 +12,7 @@ import (
 // The easiest way to use unindexed is to use the Dir function, which is
 // a drop-in replacement to http.Dir.
 func ExampleEmbedDir() {
-	http.Handle("/", http.FileServer(http.FileSystem(EmbedFS{fs: embed.FS{}})))
+	http.Handle("/", http.FileServer(http.FileSystem(EmbedFS{FS: embed.FS{}})))
 }
 
 //go:embed test_embed
@@ -21,7 +21,7 @@ var embedTest embed.FS
 func TestEmbedNotFound(t *testing.T) {
 	r := httptest.NewRequest("GET", "/doesntexist", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(http.FileSystem(EmbedFS{fs: embedTest}))
+	handler := http.FileServer(http.FileSystem(EmbedFS{FS: embedTest}))
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusNotFound {
@@ -32,7 +32,7 @@ func TestEmbedNotFound(t *testing.T) {
 func TestEmbedNoIndex(t *testing.T) {
 	r := httptest.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(EmbedFS{fs: embedTest})
+	handler := http.FileServer(EmbedFS{FS: embedTest})
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusForbidden {
@@ -43,7 +43,7 @@ func TestEmbedNoIndex(t *testing.T) {
 func TestEmbedWithIndex(t *testing.T) {
 	r := httptest.NewRequest("GET", "/test_embed/unindexed-static/", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(EmbedFS{fs: embedTest})
+	handler := http.FileServer(EmbedFS{FS: embedTest})
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusOK {
@@ -66,7 +66,7 @@ func TestEmbedWithIndex(t *testing.T) {
 func TestEmbedAccessSecret(t *testing.T) {
 	r := httptest.NewRequest("GET", "/test_embed/unindexed-static/secret.txt", nil)
 	w := httptest.NewRecorder()
-	handler := http.FileServer(EmbedFS{fs: embedTest})
+	handler := http.FileServer(EmbedFS{FS: embedTest})
 	handler.ServeHTTP(w, r)
 
 	if w.Code != http.StatusOK {

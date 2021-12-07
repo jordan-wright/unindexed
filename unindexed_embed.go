@@ -15,7 +15,7 @@ import (
 // This implementation is largely inspired by
 // https://www.alexedwards.net/blog/disable-http-fileserver-directory-listings
 type EmbedFS struct {
-	fs embed.FS
+	FS embed.FS
 }
 
 func (ef EmbedFS) Open(name string) (http.File, error) {
@@ -24,7 +24,7 @@ func (ef EmbedFS) Open(name string) (http.File, error) {
 	} else {
 		name = strings.TrimPrefix(name, "/")
 	}
-	f, err := ef.fs.Open(name)
+	f, err := ef.FS.Open(name)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (ef EmbedFS) Open(name string) (http.File, error) {
 	}
 	if s.IsDir() {
 		index := strings.TrimPrefix(name, "/") + "/index.html"
-		_, err := ef.fs.Open(index)
+		_, err := ef.FS.Open(index)
 		if err != nil {
 			return nil, os.ErrPermission
 		}
